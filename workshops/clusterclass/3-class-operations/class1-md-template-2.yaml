@@ -1,0 +1,14 @@
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: DockerMachineTemplate
+metadata:
+  name: quick-start-v1-default-worker-machinetemplate2
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        "somethiginteresting": "maybe"
+    spec:
+      extraMounts:
+      - containerPath: /var/run/docker.sock
+        hostPath: /var/run/docker.sock
