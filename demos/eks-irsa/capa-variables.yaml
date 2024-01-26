@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: capa-variables
+  namespace: capa-system
+data:
+  AWS_B64ENCODED_CREDENTIALS: Q2c9PQ==
+  AWS_CONTROLLER_IAM_ROLE: YXJuOmF3czppYW06OjMxMjY2MjUwMzU4ODpyb2xlL2NvbnRyb2xsZXJzLmNsdXN0ZXItYXBpLXByb3ZpZGVyLWF3cy5zaWdzLms4cy5pbw==
+  EXP_MACHINE_POOL: dHJ1ZQ==
+  CAPA_EKS_IAM: ZmFsc2U=
+  CAPA_EKS_ADD_ROLES: ZmFsc2U=
+  EXP_CLUSTER_RESOURCE_SET: dHJ1ZQ==
+  EXP_EKS_FARGATE: ZmFsc2U=
+  EXP_EXTERNAL_RESOURCE_GC: dHJ1ZQ==
+  CAPA_LOGLEVEL: NA==
