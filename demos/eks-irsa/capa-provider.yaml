@@ -1,8 +1,16 @@
-apiVersion: operator.cluster.x-k8s.io/v1alpha1
-kind: InfrastructureProvider
+apiVersion: turtles-capi.cattle.io/v1alpha1
+kind: CAPIProvider
 metadata:
   name: aws
   namespace: capa-system
 spec:
-  secretName: capa-variables
-  secretNamespace: capa-system
+  type: infrastructure
+  name: aws
+  version: v2.3.5
+  configSecret:
+    name: capa-variables
+  variables:
+    EXP_MACHINE_POOL: "true"
+    EXP_EXTERNAL_RESOURCE_GC: "true"
+    CAPA_LOGLEVEL: "4"
+    EXP_CLUSTER_RESOURCE_SET: "true"
