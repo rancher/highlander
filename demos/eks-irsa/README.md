@@ -7,9 +7,9 @@
 1. Create EKS cluster for rancher
 
 ```bash
-eksctl create cluster --name rancher-demo --version 1.26 --nodegroup-name ranchernodes --nodes 2 --nodes-min 1 --nodes-max 2 --managed --region eu-west-2
+eksctl create cluster --name rancher-demo --version 1.27 --nodegroup-name ranchernodes --nodes 2 --nodes-min 1 --nodes-max 2 --managed --region eu-west-2
 
-eksctl utils associate-iam-oidc-provider --cluster rancher-demo --approve
+eksctl utils associate-iam-oidc-provider --cluster rancher-demo --approve --region eu-west-2
 ```
 
 2. Install ngix helm ingress
@@ -47,7 +47,7 @@ helm install rancher --devel rancher-latest/rancher \
   --set replicas=1 \
   --set hostname=<ingress address> \
   --set global.cattle.psp.enabled=false \
-  --version v2.8.0 \
+  --version v2.8.1 \
   --set ingress.ingressClassName=nginx
 ```
 
@@ -59,7 +59,7 @@ https://<ingress address>
 ### Update IAM Role
 
 1. Go to AWS console
-2. Get the OIDC provider for the EKS cluster
+2. Get the OIDC provider for the EKS cluster (from the cluster overview page)
 3. Go to IAM
 4. Edit the trust policy of the ****controllers.cluster-api-provider-aws.sigs.k8s.io** role
 
@@ -91,32 +91,14 @@ https://<ingress address>
 
 5. Save the ARN of the role
 
-### Disable embedded CAPI
-
-1. Bounce the fleet controller
-2. Disbale embedded CAPI feature:
-
-```bash
-kubectl apply -f feature.yaml
-```
-
-3. Wait for Rancher to restart and embedded capi pod to be stopped
-4. Cleanup old webhooks
-
-```bash
-kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io mutating-webhook-configuration
-
-kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
-```
-
 ## Demo
 
 ### Install Rancher Turtles
 
 - Explore the local cluster
-- Go to App-> Repositories
-- Click **Create** to add a new repository Name: turtles Index URL: `https://rancher-sandbox.github.io/rancher-turtles`
-- Go to Apps->Charts
+- Go to App -> Repositories
+- Click **Create** to add a new repository Name: turtles Index URL: `https://rancher.github.io/turtles/index.yaml`
+- Go to Apps -> Charts
 - Filter for Turtles
 - Click **rancher-turtles**
 - Click **Install**
@@ -162,7 +144,7 @@ kubectl apply -f capa-provider.yaml
 - Click **Add Repository**
 - Fill in:
     Name: clusters
-    Repository URL: get HTTPS clone url from samples reposiroty (<https://github.com/rancher-sandbox/rancher-turtles-fleet-example>)
+    Repository URL: get HTTPS clone URL from samples reposiroty (<https://github.com/rancher-sandbox/rancher-turtles-fleet-example>)
     Branch Name: aws
 - Click **Next**
 - Click **Create**
