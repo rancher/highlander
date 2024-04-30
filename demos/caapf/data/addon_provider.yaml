@@ -4,6 +4,6 @@ metadata:
   name: fleet
   namespace: default
 spec:
-  version: v0.1.0
+  version: v0.2.0
   fetchConfig:
-    url: https://github.com/rancher-sandbox/cluster-api-addon-provider-fleet/releases/v0.1.0/addon-components.yaml
+    url: https://github.com/rancher-sandbox/cluster-api-addon-provider-fleet/releases/v0.2.0/addon-components.yaml
