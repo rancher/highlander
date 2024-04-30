@@ -55,6 +55,13 @@ curl \
   -d "{\"name\": \"$REPO_NAME\", \"auto_init\": true}" \
   -i
 
+# Install cert-manager
+pe "kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.12.0/cert-manager.crds.yaml"
+pe "helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.12.0"
+
+# Install CAPI operator
+pe "helm install capi-operator capi-operator/cluster-api-operator --create-namespace -n capi-operator-system --wait"
+
 # Add git auth secret
 pe "kubectl create secret generic basic-auth-secret -n fleet-local --type=kubernetes.io/basic-auth --from-literal=username=$USERNAME --from-literal=password=$PASSWORD"
 
@@ -74,9 +81,6 @@ EOF
 pe "$EDITOR repo.yaml"
 pe "kubectl apply -n fleet-local -f repo.yaml"
 
-# Install CAPI operator
-pe "helm install capi-operator capi-operator/cluster-api-operator --create-namespace -n capi-operator-system --set cert-manager.enabled=true --wait"
-
 export GITEA_URL="http://$USERNAME:$PASSWORD@$NODE_IP:$NODE_PORT"
 pe "xdg-open $GITEA_URL"
 
@@ -85,6 +89,13 @@ export GIT_URL="http://$USERNAME:$PASSWORD@$NODE_IP:$NODE_PORT/$USERNAME/$REPO_N
 # Clone the test repo
 pe "git clone $GIT_URL"
 pei "cd test"
+
+# Add kindnet CNI using CRS
+pe "mkdir crs"
+pe "cp ../data/crs.yaml crs/"
+pei "git add ."
+pei "git commit -m \"Add kindet crs\""
+pe "git push"
 
 # Install CAPI providers
 # equivalent of doing clusterctl init
@@ -107,13 +118,6 @@ pei "git add ."
 pei "git commit -m \"Add clustercluster definition\""
 pe "git push"
 
-# Add kindnet CNI using CRS
-pe "mkdir crs"
-pe "cp ../data/crs.yaml crs/"
-pei "git add ."
-pei "git commit -m \"Add kindet crs\""
-pe "git push"
-
 # Create a child cluster
 pe "mkdir clusters"
 pe "cp ../data/cluster1.yaml clusters/"
@@ -130,6 +134,7 @@ pe "git push"
 pei "echo \"Explore cluster group\""
 
 # Deploy nginx to all dev clusters
+pei "mkdir apps"
 pe "cp ../data/nginx_bundle.yaml apps/"
 pei "git add ."
 pei "git commit -m \"Add ngnix to dev clusters\""
