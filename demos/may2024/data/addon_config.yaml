@@ -1,0 +1,10 @@
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: FleetAddonConfig
+metadata:
+  name: fleet-addon-config
+  namespace: caapf-system
+spec:
+  cluster:
+    enabled: false
+  cluster_class:
+    enabled: true
