@@ -90,13 +90,6 @@ export GIT_URL="http://$USERNAME:$PASSWORD@$NODE_IP:$NODE_PORT/$USERNAME/$REPO_N
 pe "git clone $GIT_URL"
 pei "cd test"
 
-# Add kindnet CNI using CRS
-pe "mkdir crs"
-pe "cp ../data/crs.yaml crs/"
-pei "git add ."
-pei "git commit -m \"Add kindet crs\""
-pe "git push"
-
 # Install CAPI providers
 # equivalent of doing clusterctl init
 pe "mkdir mgmt"
@@ -105,11 +98,21 @@ pei "git add ."
 pei "git commit -m \"Add CAPI providers\""
 pe "git push"
 
+pe "kubectl rollout status deployment capi-controller-manager -n default --timeout=90s"
+
+# Add kindnet CNI using CRS
+pe "mkdir crs"
+pe "cp ../data/crs.yaml crs/"
+pei "git add ."
+pei "git commit -m \"Add kindet crs\""
+pe "git push"
+
 # Install the Fleet addon provider
 pe "cp ../data/addon_provider.yaml mgmt/"
 pei "git add ."
 pei "git commit -m \"Add fleet addon provider providers\""
 pe "git push"
+pe "kubectl rollout status deployment caapf-controller-manager -n default --timeout=90s"
 
 # Add the cluster class
 pe "mkdir classes"
@@ -148,6 +151,8 @@ pe "cp ../data/podinfo_bundle.yaml apps/"
 pei "git add ."
 pei "git commit -m \"Add podinfo to quickstart group\""
 pe "git push"
+
+pe "echo \"Explore git and see how the app was deployed\""
 
 # Add second cluster and watch everything get deployed
 pe "cp ../data/cluster2.yaml clusters/"
