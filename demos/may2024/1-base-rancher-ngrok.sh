@@ -14,9 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-RANCHER_HOSTNAME=$1
+RANCHER_HOSTNAME=${1:-$RANCHER_HOSTNAME}
 if [ -z "$RANCHER_HOSTNAME" ]; then
 	echo "You must pass a rancher host name"
+	exit 1
+fi
+
+if [ -z "$NGROK_API_KEY" ]; then
+	echo "You must pass a rancher apikey"
+	exit 1
+fi
+
+if [ -z "$NGROK_AUTHTOKEN" ]; then
+	echo "You must pass a rancher authtoken"
 	exit 1
 fi
 
@@ -27,9 +37,6 @@ if [ -d ./test ]; then
 fi
 
 RANCHER_VERSION=${RANCHER_VERSION:-v2.8.3}
-
-NGROK_AUTHTOKEN=""
-NGROK_API_KEY=""
 
 BASEDIR=$(dirname "$0")
 
@@ -57,6 +64,7 @@ helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 helm repo update
 
+echo "Installaing ngrok"
 helm install ngrok ngrok/kubernetes-ingress-controller \
 	--set credentials.apiKey="$NGROK_API_KEY" \
 	--set credentials.authtoken="$NGROK_AUTHTOKEN" \
@@ -64,8 +72,9 @@ helm install ngrok ngrok/kubernetes-ingress-controller \
 
 kubectl rollout status deployment ngrok-kubernetes-ingress-controller-manager --timeout=90s
 
-kubectl apply -f ./rancher-ingress/ingress-class-patch.yaml --server-side
+kubectl apply -f ./data/rancher-ingress/ingress-class-patch.yaml --server-side
 
+echo "Installaing cert-manager"
 helm install cert-manager jetstack/cert-manager \
 	--namespace cert-manager \
 	--create-namespace \
@@ -75,6 +84,9 @@ helm install cert-manager jetstack/cert-manager \
 
 kubectl rollout status deployment cert-manager -n cert-manager --timeout=90s
 
+sleep 5
+
+echo "Installaing rancher $RANCHER_VERSION accessible at $RANCHER_HOSTNAME"
 helm install rancher rancher-latest/rancher \
 	--namespace cattle-system \
 	--create-namespace \
@@ -85,7 +97,11 @@ helm install rancher rancher-latest/rancher \
 	--version "$RANCHER_VERSION" \
 	--wait
 
+echo "Waiting for rancher $RANCHER_VERSION to be accessible at $RANCHER_HOSTNAME"
 kubectl rollout status deployment rancher -n cattle-system --timeout=180s
+kubectl rollout status deployment rancher-webhook -n cattle-system --timeout=180s
 
-kubectl apply -f ./data/rancher-ingress/ingress.yaml
+echo "Patching settings"
+envsubst < ./data/rancher-ingress/ingress.yaml | kubectl apply -f - --server-side
+envsubst < ./data/rancher-ingress/setting-patch.yaml | kubectl apply -f - --server-side --force-conflicts
 kubectl apply -f ./data/rancher-ingress/rancher-service-patch.yaml --server-side

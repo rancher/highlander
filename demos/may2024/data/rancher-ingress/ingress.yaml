@@ -5,7 +5,7 @@ metadata:
   namespace: cattle-system
 spec:
   rules:
-  - host: <host>
+  - host: ${RANCHER_HOSTNAME}
     http:
       paths:
       - path: /
