@@ -50,8 +50,16 @@ curl \
 
 kubectl create secret generic basic-auth-secret -n fleet-local --type=kubernetes.io/basic-auth --from-literal=username=$USERNAME --from-literal=password=$PASSWORD
 
-#export GITEA_URL="http://$USERNAME:$PASSWORD@$NODE_IP:$NODE_PORT"
-xdg-open $GITEA_URL
+echo "kind: GitRepo
+apiVersion: fleet.cattle.io/v1alpha1
+metadata:
+  name: fleet-repo
+  namespace: fleet-local
+spec:
+  repo: http://$NODE_IP:$NODE_PORT/$USERNAME/$REPO_NAME.git
+  branch: main
+  forceSyncGeneration: 1
+  clientSecretName: basic-auth-secret
+" | kubectl apply -f -
 
-#export GIT_URL="http://$USERNAME:$PASSWORD@$NODE_IP:$NODE_PORT/$USERNAME/$REPO_NAME.git"
-git clone $GIT_URL
+xdg-open $GITEA_URL
