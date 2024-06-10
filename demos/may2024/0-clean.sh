@@ -34,3 +34,6 @@ if [ ./repo.yaml ]; then
     echo "Removing repo file"
     rm repo.yaml
 fi
+
+kind delete cluster --name demo
+kind delete cluster --name cluster1

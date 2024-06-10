@@ -29,4 +29,5 @@ spec:
                   - containerPort: 80
     name: nginx.yaml
   targets:
+  - clusterGroup: quick-start
   - clusterGroup: dev-group

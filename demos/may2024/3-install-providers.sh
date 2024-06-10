@@ -24,9 +24,11 @@ DEMO_PROMPT="${GREEN}➜ ${CYAN}\W ${COLOR_RESET}"
 pe "git clone $GIT_URL"
 pei "cd clusters"
 
-pe "mkdir clusters"
-pe "cp ../data/cluster.yaml clusters/"
+# Scale cluster to 3 nodes and update cluster version to 1.28.0
+pe "mkdir providers"
+pe "cp ../data/kubeadm-bootstrap.yaml providers/"
+pe "cp ../data/kubeadm-control-plane.yaml providers/"
+
 pei "git add ."
-pei "git commit -m \"Add cluster definition\""
+pei "git commit -m \"Add kubeadm bootstrap and CP providers\""
 pe "git push"
-pei "echo \"Explore child cluster\""
