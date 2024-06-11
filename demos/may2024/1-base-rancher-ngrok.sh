@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Copyright 2024 SUSE.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,3 +103,4 @@ echo "Patching settings"
 envsubst < ./data/rancher-ingress/ingress.yaml | kubectl apply -f - --server-side
 envsubst < ./data/rancher-ingress/setting-patch.yaml | kubectl apply -f - --server-side --force-conflicts
 kubectl apply -f ./data/rancher-ingress/rancher-service-patch.yaml --server-side
+
