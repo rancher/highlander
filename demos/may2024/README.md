@@ -1,5 +1,7 @@
 # Rancher Turtles Demo - May 2024
 
+Reference to the recording of the [demo](https://github.com/rancher/highlander/assets/32226600/08887586-ad61-40d8-9347-5af6e90e272b).
+
 ## Base setup
 
 > Do this in preparation of the demo beforehand. 
