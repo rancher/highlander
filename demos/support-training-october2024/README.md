@@ -13,7 +13,25 @@
 ./1-base-rancher-ngrok.sh <rancher-hostname-(optionally)>
 ```
 
-3. Provision a cluster
+3. Install a CAPIProvider
+
+In order to prepare infrastructure for the cluster creation, we need to apply a `CAPIProvider` resource first. Without extra modifications, a valid resource can be as simple as:
+
+```yaml
+apiVersion: turtles-capi.cattle.io/v1alpha1
+kind: CAPIProvider
+metadata:
+  name: azure
+spec:
+  type: infrastructure
+```
+
+To apply:
+```bash
+kubectl apply -f capi-providers.yaml
+```
+
+4. Provision a cluster
 
 ```bash
 export CLUSTER_NAME="aks-demo"
