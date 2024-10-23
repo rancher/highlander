@@ -1,0 +1,6 @@
+apiVersion: turtles-capi.cattle.io/v1alpha1
+kind: CAPIProvider
+metadata:
+  name: azure
+spec:
+  type: infrastructure

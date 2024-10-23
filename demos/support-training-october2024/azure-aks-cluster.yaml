@@ -3,6 +3,8 @@ kind: Cluster
 metadata:
   name: "${CLUSTER_NAME}"
   namespace: default
+  labels:
+    cluster-api.cattle.io/rancher-auto-import: "true"
 spec:
   clusterNetwork:
     services:
@@ -29,7 +31,7 @@ spec:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureClusterIdentity
     name: cluster-identity
-  location: southcentralus
+  location: ${AZURE_LOCATION}
   resourceGroupName: "${CLUSTER_NAME}"
   nodeResourceGroupName: "${CLUSTER_NAME}-nodes"
   sshPublicKey: ""
@@ -76,7 +78,7 @@ metadata:
 spec:
   mode: System
   name: pool0
-  sku: Standard_D2s_v3
+  sku: "${AZURE_INSTANCE}"
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachinePool
@@ -110,7 +112,7 @@ metadata:
 spec:
   mode: User
   name: pool1
-  sku: Standard_D2s_v3
+  sku: "${AZURE_INSTANCE}"
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureClusterIdentity
@@ -129,3 +131,12 @@ spec:
     namespace: default
   tenantID: "${AZURE_TENANT_ID}"
   type: ServicePrincipal
+---
+apiVersion: v1
+stringData:
+  clientSecret: "${AZURE_CLIENT_SECRET}"
+kind: Secret
+metadata:
+  name: cluster-identity-secret
+  namespace: default
+type: Opaque
