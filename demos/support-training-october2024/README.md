@@ -13,7 +13,7 @@
 ./1-base-rancher-ngrok.sh <rancher-hostname-(optionally)>
 ```
 
-3. Install a CAPIProvider
+3. Install a `CAPIProvider`
 
 In order to prepare infrastructure for the cluster creation, we need to apply a `CAPIProvider` resource first. Without extra modifications, a valid resource can be as simple as:
 
@@ -27,6 +27,7 @@ spec:
 ```
 
 To apply:
+
 ```bash
 kubectl apply -f capi-providers.yaml
 ```
