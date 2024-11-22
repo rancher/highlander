@@ -1,0 +1,11 @@
+apiVersion: turtles-capi.cattle.io/v1alpha1
+kind: CAPIProvider
+metadata:
+  name: aws-infra
+spec:
+  type: infrastructure
+  credentials:
+    rancherCloudCredential: aws-creds
+  features:
+    clusterTopology: true
+    clusterResourceSet: true
