@@ -104,13 +104,13 @@ pe "kubectl rollout status deployment capi-controller-manager -n default --timeo
 pe "mkdir crs"
 pe "cp ../data/crs.yaml crs/"
 pei "git add ."
-pei "git commit -m \"Add kindet crs\""
+pei "git commit -m \"Add kindnet crs\""
 pe "git push"
 
 # Install the Fleet addon provider
 pe "cp ../data/addon_provider.yaml mgmt/"
 pei "git add ."
-pei "git commit -m \"Add fleet addon provider providers\""
+pei "git commit -m \"Add fleet addon provider\""
 pe "git push"
 pe "kubectl rollout status deployment caapf-controller-manager -n default --timeout=90s"
 
@@ -118,7 +118,7 @@ pe "kubectl rollout status deployment caapf-controller-manager -n default --time
 pe "mkdir classes"
 pe "cp ../data/clusterclass.yaml classes/"
 pei "git add ."
-pei "git commit -m \"Add clustercluster definition\""
+pei "git commit -m \"Add cluster class definition\""
 pe "git push"
 
 # Create a child cluster
@@ -140,7 +140,7 @@ pei "echo \"Explore cluster group\""
 pei "mkdir apps"
 pe "cp ../data/nginx_bundle.yaml apps/"
 pei "git add ."
-pei "git commit -m \"Add ngnix to dev clusters\""
+pei "git commit -m \"Add nginx to dev clusters\""
 pe "git push"
 
 # Add bundle that uses the cluster group that was automatically created

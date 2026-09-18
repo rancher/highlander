@@ -62,7 +62,7 @@ helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 helm repo update
 
-echo "Installaing ngrok"
+echo "Installing ngrok"
 helm install ngrok ngrok/kubernetes-ingress-controller \
 	--set credentials.apiKey="$NGROK_API_KEY" \
 	--set credentials.authtoken="$NGROK_AUTHTOKEN" \
@@ -72,7 +72,7 @@ kubectl rollout status deployment ngrok-kubernetes-ingress-controller-manager --
 
 kubectl apply -f ./data/rancher-ingress/ingress-class-patch.yaml --server-side
 
-echo "Installaing cert-manager"
+echo "Installing cert-manager"
 helm install cert-manager jetstack/cert-manager \
 	--namespace cert-manager \
 	--create-namespace \
@@ -84,7 +84,7 @@ kubectl rollout status deployment cert-manager -n cert-manager --timeout=90s
 
 sleep 5
 
-echo "Installaing rancher $RANCHER_VERSION accessible at $RANCHER_HOSTNAME"
+echo "Installing rancher $RANCHER_VERSION accessible at $RANCHER_HOSTNAME"
 helm install rancher rancher-latest/rancher \
 	--namespace cattle-system \
 	--create-namespace \

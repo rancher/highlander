@@ -35,5 +35,5 @@ pe "git push"
 
 pe "cp ../data/nginx_bundle.yaml apps/"
 pei "git add ."
-pei "git commit -m \"Add ngnix to dev clusters\""
+pei "git commit -m \"Add nginx to dev clusters\""
 pe "git push"
